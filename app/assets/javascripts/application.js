@@ -69,7 +69,10 @@ function initialize() {
     var list = document.getElementById("category-list");
     for(var key in categoryHash) {
       var listItem = document.createElement('li');
-      listItem.appendChild(document.createTextNode(key));
+      var button = document.createElement("button");
+      button.appendChild(document.createTextNode(key));
+      button.className = "btn btn-default btn-custom";
+      listItem.appendChild(button);
       list.appendChild(listItem);
     }
 
