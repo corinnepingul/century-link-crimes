@@ -75,8 +75,6 @@ function initialize() {
       listItem.appendChild(button);
       list.appendChild(listItem);
     }
-
-    // console.log(categoryHash);
   });
 
 
@@ -91,3 +89,5 @@ function initialize() {
   //     '</div>']
   // ];
 }
+
+$(".navbar-brand").click(initialize());
