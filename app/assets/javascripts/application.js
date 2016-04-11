@@ -29,6 +29,7 @@ function initialize() {
   var mapOptions = {
       mapTypeId: 'roadmap'
   };
+  var categoryHash = {};
 
   // Display a map on the page
   map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
@@ -53,9 +54,26 @@ function initialize() {
             map: map
         });
 
+        if(obj.hasOwnProperty("event_clearance_subgroup") != null) {
+          if(categoryHash.hasOwnProperty(obj["event_clearance_subgroup"])) {
+            categoryHash[obj["event_clearance_subgroup"]] += 1;
+          } else {
+            categoryHash[obj["event_clearance_subgroup"]] = 1;
+          }
+        }
+
         map.fitBounds(bounds);
       } else { continue; }
     }
+
+    var list = document.getElementById("category-list");
+    for(var key in categoryHash) {
+      var listItem = document.createElement('li');
+      listItem.appendChild(document.createTextNode(key));
+      list.appendChild(listItem);
+    }
+
+    // console.log(categoryHash);
   });
 
 
