@@ -66,15 +66,46 @@ function initialize() {
       } else { continue; }
     }
 
-    var list = document.getElementById("category-list");
-    for(var key in categoryHash) {
-      var listItem = document.createElement('li');
-      var button = document.createElement("button");
-      button.appendChild(document.createTextNode(key));
-      button.className = "btn btn-default btn-custom";
-      listItem.appendChild(button);
-      list.appendChild(listItem);
-    }
+    // <div class="btn-group" data-toggle="buttons">
+    //   <label class="btn btn-primary active">
+    //     <input type="checkbox" checked autocomplete="off"> Checkbox 1 (pre-checked)
+    //   </label>
+    //   <label class="btn btn-primary">
+    //     <input type="checkbox" autocomplete="off"> Checkbox 2
+    //   </label>
+    //   <label class="btn btn-primary">
+    //     <input type="checkbox" autocomplete="off"> Checkbox 3
+    //   </label>
+    // </div>
+
+    $.each(categoryHash, function(key, value) {
+      var $label = $("<label></label>");
+      var $input = $("<input/>");
+      $input.attr("type", "checkbox");
+      $input.attr("autocomplete", "off");
+      $label.append($input);
+      $label.addClass("btn btn-default btn-custom");
+      $label.text(key);
+      $(".hello").append($label);
+    });
+    // $("#category-list").append(btnGroup);
+
+    // for(var key in categoryHash) {
+    //   var label = document.createElement("label");
+    //   var input = document.createElement("input");
+    //   label.classList.add("btn", "btn-default");
+    //   input.setAttribute("type", "checkbox");
+    //   input.setAttribute("autocomplete", "off");
+    //   label.appendChild(input);
+    //   label.value(document.createTextNode(key));
+    //   var listItem = document.createElement("li");
+    //   // var button = document.createElement("button");
+    //   // button.appendChild(document.createTextNode(key));
+    //   // button.className = "btn btn-default btn-custom";
+    //   // listItem.appendChild(button);
+    //   listItem.appendChild(label);
+    //   list.appendChild(listItem);
+    // }
   });
 
 
