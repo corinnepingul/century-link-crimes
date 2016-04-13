@@ -13,85 +13,45 @@
 // //= require jquery
 // //= require bootstrap-sprockets
 // //= require jquery_ujs
-// //= require turbolinks
 // //= require_tree .
-//
-jQuery(function($) {
-    // Asynchronously Load the map API
-    var script = document.createElement('script');
-    script.src = "http://maps.googleapis.com/maps/api/js?&callback=initialize";
-    document.body.appendChild(script);
-});
-//
-// var url = "https://data.seattle.gov/resource/3k2p-39jp.json";
+
+var url = "https://data.seattle.gov/resource/3k2p-39jp.json";
+var map;
+var markers = [];
 //
 function initialize() {
-  var map;
   var bounds = new google.maps.LatLngBounds();
   var mapOptions = {
-      mapTypeId: 'roadmap'
+    mapTypeId: 'roadmap'
   };
-//   var categoryHash = {};
-//
+
   // Display a map on the page
-  map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+  map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
   map.setTilt(45);
 
-  var pos = new google.maps.LatLng("47.593304", "-122.332165");
   // Map the destination (Century Link)
+  var positionCenturyLink = new google.maps.LatLng("47.593304", "-122.332165");
   marker = new google.maps.Marker({
-    position: pos,
+    position: positionCenturyLink,
     map: map,
     icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
   });
-  bounds.extend(pos);
+  bounds.extend(positionCenturyLink);
   map.fitBounds(bounds);
 
-//   jQuery.getJSON(url + "?$where=within_circle(incident_location, 47.593304, -122.332165,1069)", function(data) {
-//     for(i = 0; i < data.length; i++ ) {
-//       var obj = data[i];
-//
-//       if(obj.hasOwnProperty("latitude") && obj.hasOwnProperty("longitude")) {
-//         var position = new google.maps.LatLng(obj["latitude"], obj["longitude"]);
-//         bounds.extend(position);
-//         marker = new google.maps.Marker({
-//             position: position,
-//             map: map
-//         });
-//
-//         if(obj.hasOwnProperty("event_clearance_subgroup") != null) {
-//           if(categoryHash.hasOwnProperty(obj["event_clearance_subgroup"])) {
-//             categoryHash[obj["event_clearance_subgroup"]] += 1;
-//           } else {
-//             categoryHash[obj["event_clearance_subgroup"]] = 1;
-//           }
-//         }
-//
-//         map.fitBounds(bounds);
-//       } else { continue; }
-//     }
-//
-//     // Category buttons
-// //     <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
-// //   Single toggle
-// // </button>
-//     $.each(categoryHash, function(key, value) {
-//       var $btn = $("<button></button");
-//       $btn.addClass("btn btn-default btn-custom");
-//       $btn.attr("type", "button");
-//       $btn.attr("data-toggle", "button");
-//       $btn.attr("aria-pressed", "false");
-//       $btn.attr("autocomplete", "off");
-//       $btn.text(key);
-//       $(".btn-group").append($btn);
-//     });
-//   });
-//
-//   // if a button is clicked, remove all the current data,
-//   // make an api call for it and
-//   // display the relevant data on the map
-//
-//
+  // Map markers for general API call
+  var data = JSON.parse($("#data").attr("data"));
+
+  for(i = 0; i < data.length; i++ ) {
+    var obj = data[i];
+
+    if(obj.hasOwnProperty("latitude") && obj.hasOwnProperty("longitude")) {
+      var position = new google.maps.LatLng(obj["latitude"], obj["longitude"]);
+      bounds.extend(position);
+      addMarker(position);
+      map.fitBounds(bounds);
+    } else { continue; }
+  }
 //   // Info Window Content
 //   // var infoWindowContent = [
 //   //     ['<div class="info_content">' +
@@ -104,45 +64,62 @@ function initialize() {
 //   // ];
 }
 
-// $(document).ready(function() {
-//   $(".btn-group").on("click", ".btn-custom", function(event) {
-//     var btn = $(event.target);
-//     if(!btn.hasClass("active")) {
-//       // if it had the active class, that means it's being unchecked
-//       var map;
-//       var type = btn.text();
-//       var bounds = new google.maps.LatLngBounds();
-//       var mapOptions = {
-//           mapTypeId: 'roadmap'
-//       };
-//
-//       // Display a map on the page
-//       map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-//       map.setTilt(45);
-//
-//       // Map the destination (Century Link)
-//       marker = new google.maps.Marker({
-//         position: new google.maps.LatLng("47.593304", "-122.332165"),
-//         map: map,
-//         icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-//       });
-//
-//       jQuery.getJSON(url + "?$where=within_circle(incident_location, 47.593304, -122.332165,1069)&initial_type_subgroup=" + type, function(data) {
-//         for(i = 0; i < data.length; i++ ) {
-//           var obj = data[i];
-//
-//           if(obj.hasOwnProperty("latitude") && obj.hasOwnProperty("longitude")) {
-//             var position = new google.maps.LatLng(obj["latitude"], obj["longitude"]);
-//             bounds.extend(position);
-//             marker = new google.maps.Marker({
-//                 position: position,
-//                 map: map
-//             });
-//
-//             map.fitBounds(bounds);
-//           } else { continue; }
-//         }
-//       });
-//     }
-//   });
-// });
+$(document).ready(function() {
+  $("#menu-toggle").on("click", function(event) {
+    event.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+  });
+
+  $(".category-group").on("click", ".category-link", function(event) {
+    event.preventDefault();
+    deleteMarkers();
+    var btn = $(event.target);
+    var type = btn.text();
+
+    jQuery.getJSON(url + "?$where=within_circle(incident_location, 47.593304, -122.332165,1069)&event_clearance_subgroup=" + type, function(data) {
+      for(i = 0; i < data.length; i++ ) {
+        var obj = data[i];
+
+        if(obj.hasOwnProperty("latitude") && obj.hasOwnProperty("longitude")) {
+          var position = new google.maps.LatLng(obj["latitude"], obj["longitude"]);
+          addMarker(position);
+
+        } else { continue; }
+      }
+    });
+  });
+});
+
+// MARKER FUNCTIONS ------------------------------------------------------------
+
+// Adds a marker to the map and push to the array.
+function addMarker(location) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map
+  });
+  markers.push(marker);
+}
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}

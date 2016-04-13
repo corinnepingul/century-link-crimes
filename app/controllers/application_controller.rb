@@ -19,13 +19,18 @@ class ApplicationController < ActionController::Base
       response = {}
       code = :no_content
     end
-    process_json(JSON.parse(response.body))
+    @data = response.body
+    @categories = map_categories(JSON.parse(@data))
   end
 
-  def process_json(json)
-    categoryHash = {}
-    json.each do |crime|
-      
+  private
+
+  def map_categories(data)
+    category_set = Set.new
+    data.each do |crime|
+      category_set.add(crime["event_clearance_subgroup"])
     end
+
+    return category_set
   end
 end

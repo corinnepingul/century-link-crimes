@@ -1,23 +1,20 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <div class="navbar-brand">
-        Century Link Crimes
-      </div>
-    </div>
+<div id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+      <ul class="sidebar-nav">
+          <li class="sidebar-brand">
+            <a href="/" id="title">Century Link Crimes</a>
+            <a href="/" id="menu-toggle"><span id="main_icon" class="glyphicon glyphicon-align-justify"></span></a>
+          </li>
+          <div class="category-group">
+            <% @categories.each do |category| %>
+              <li><a href="/" class="category-link"><%= category.capitalize %></a></li>
+            <% end %>
+          </div>
+      </ul>
   </div>
-</nav>
-<div class="container-fluid">
-  <div class="row">
-      <div class="col-sm-9">
-        <div id="map_wrapper">
-          <div id="map_canvas" class="mapping"></div>
-        </div>
-        <%= @data %>
-      </div>
-      <div class="col-sm-3">
-        <div class="btn-group">
-        </div>
-      </div>
+  <!-- Google Map-->
+  <div id="map-wrapper">
+    <div id="map-canvas" class="mapping"></div>
   </div>
 </div>
