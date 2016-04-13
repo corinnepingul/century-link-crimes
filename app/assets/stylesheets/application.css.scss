@@ -37,40 +37,47 @@
 
 #wrapper {
    padding-left: 0;
-   -webkit-transition: all 0.5s ease;
-   -moz-transition: all 0.5s ease;
-   -o-transition: all 0.5s ease;
-   transition: all 0.5s ease;
+   left: 275px;
 }
 
-// #wrapper.toggled {
-//    padding-left: 250px;
-// }
+#wrapper.toggled {
+   padding-left: 275px;
+}
 
 #sidebar-wrapper {
    z-index: 1000;
    position: fixed;
-   left: 250px;
-   width: 0;
+   width: 275px;
    height: 100%;
-   margin-left: -250px;
+   margin-left: -275px;
    overflow-y: auto;
    background: #000;
    opacity: .85;
-   -webkit-transition: all 0.5s ease;
-   -moz-transition: all 0.5s ease;
-   -o-transition: all 0.5s ease;
-   transition: all 0.5s ease;
+   left: 70px;
+   -webkit-transition: all .5s ease;
+   -moz-transition: all .5s ease;
+   -o-transition: all .5s ease;
+   -ms-transition: all .5s ease;
+   transition: all .5s ease;
 }
 
-// #wrapper.toggled #sidebar-wrapper {
-//   width: 250px;
-// }
+#wrapper.toggled #sidebar-wrapper {
+  left: 275px;
+}
+
+.category-group {
+  visibility: hidden;
+}
+
+#wrapper.toggled #sidebar-wrapper .sidebar-nav .row .col-xs-12 .category-group {
+  visibility: visible;
+}
 
 /* Sidebar Styles */
 
 .category-group {
   width: 100%;
+  line-height: 40px;
 }
 
 .category-link {
@@ -88,9 +95,9 @@
 }
 
 
-.sidebar-nav li {
-   text-indent: 15px;
-   line-height: 40px;
+.row .col-xs-9,
+.row .col-xs-12 div li {
+   text-indent: 20px;
 }
 
 .sidebar-nav li a {
@@ -130,7 +137,8 @@
 
 @media(min-width:768px) {
    #wrapper {
-       padding-left: 250px;
+       padding-left: 275px;
+       left: 275;
    }
 
    #wrapper.toggled {
@@ -138,18 +146,23 @@
    }
 
    #sidebar-wrapper {
-       width: 250px;
+       left: 275px;
    }
 
    #wrapper.toggled #sidebar-wrapper {
-       width: 50px;
+      left: 70px;
+      -webkit-transition: all .5s ease;
+      -moz-transition: all .5s ease;
+      -o-transition: all .5s ease;
+      -ms-transition: all .5s ease;
+      transition: all .5s ease;
    }
 
-   #wrapper.toggled #sidebar-wrapper .sidebar-brand #title {
-      display: none;
+   .category-group {
+     visibility: visible;
    }
 
-   #wrapper.toggled #sidebar-wrapper .sidebar-nav .category-group {
-      display: none;
+   #wrapper.toggled #sidebar-wrapper .sidebar-nav .row .col-xs-12 .category-group {
+     visibility: hidden;
    }
 }

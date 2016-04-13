@@ -87,6 +87,11 @@ $(document).ready(function() {
         } else { continue; }
       }
     });
+
+    // if($("#wrapper").css("padding-left") == "250px") {
+    //   console.log("hello");
+    //   $("#wrapper").removeClass("toggled");
+    // }
   });
 });
 
