@@ -66,12 +66,12 @@
 }
 
 .category-group,
-.msg {
+.headings {
   visibility: hidden;
 }
 
 #wrapper.toggled #sidebar-wrapper .sidebar-nav .row .col-xs-12 .category-group,
-#wrapper.toggled .msg {
+#wrapper.toggled .headings {
   visibility: visible;
 }
 
@@ -102,7 +102,7 @@
   text-indent: 20px
 }
 
-.msg {
+.headings {
   color: #fff;
   padding: 0 20px 10px 20px;
 }
@@ -166,12 +166,12 @@
    }
 
    .category-group,
-   .msg {
+   .headings {
      visibility: visible;
    }
 
    #wrapper.toggled #sidebar-wrapper .sidebar-nav .row .col-xs-12 .category-group,
-   #wrapper.toggled .msg {
+   #wrapper.toggled .headings {
      visibility: hidden;
    }
 }
